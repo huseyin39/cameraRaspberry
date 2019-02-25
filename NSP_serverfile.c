@@ -5,7 +5,6 @@
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <errno.h> 
-
 int main(int argc, char ** argv)
 { 
 int st,fic,res;
@@ -49,14 +48,14 @@ char mes[1024];
   printf("Connexion acceptee; client %s\n",inet_ntoa(client.sin_addr));
   // la connexion est etablie
  
-  strcpy(mes,"Welcome on the file Server");
+  strcpy(mes,"Welcome on the file Server donner le nom de l'image avec .jpeg\n");
   st = send(s,mes,strlen(mes),0);
   if (st==-1) {
      printf("error occur on sending the welcome message\n");
      return -1;
    }
    do {
-      printf("waiting for client message\n");
+      printf("nom de l'image avec .jpeg\n");
       st = recv(s,&mes,sizeof(mes),0);
 	if (strcmp(mes,"end")==0)
 		{
@@ -65,34 +64,11 @@ char mes[1024];
 		}
       if (st > 0) {
         mes[st] = 0;
-        printf("the file requested is: %s\n",mes);
-        fic = open(mes,O_RDONLY);
-        if (fic==-1) {
-           printf("cannot open the file\n");
-           strcpy(mes,"9");
-           st = send(s,mes,strlen(mes),0);  
-          }
-        else {
-          do {
-            res = read(fic, mes, sizeof(mes)-2);
-            mes[res]=0;
-            if (res==-1) {
-              perror("reading error\n");
-              strcpy(mes,"8");
-             } 
-            else {
-                 mes[res]=0;
-                 if (res<sizeof(mes)-2)
-					strcat(mes,"1");  // end of file
-                 else 
-					strcat(mes,"0"); // it should read another line
-              }
-            st = send(s,mes,strlen(mes),0); 
-            printf("%s",mes);
-           } while (res>=sizeof(mes)-2);
-           if ((res!=sizeof(mes)-2)&&(res>0)) printf("file sent\n");
-         }
-      }
+        printf("le nom de l'image est: %s\n",mes);
+        char comd[]="./v4l2grab -o ";
+        strcat(comd,mes);
+        int status = system(comd);
+}
     } while (strcmp("end",mes)!=0);
   close(s);
   close(soc);
