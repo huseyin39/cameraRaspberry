@@ -1,5 +1,3 @@
-# Partie 1: Créer un système d'exploitation pour la raspberry avec buildroot
-
 ## étape 1: installer docker
 voir le guide à l'adresse: https://docs.docker.com/install/linux/docker-ce/ubuntu/
 docker sert à compiler un OS pour la raspberry, on utilise une image précompilée car le temps de compilation est long
