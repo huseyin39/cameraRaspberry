@@ -1,9 +1,14 @@
-Créer un système d'exploitation avec buildroot:
-  installer docker (voir leur guide): https://docs.docker.com/install/linux/docker-ce/ubuntu/
-  docker sert à compiler un OS pour la raspberry, on utilise une image précompilée car le temps de compilation est long
-  
-récupération de l'image pré-compilée:
+# Partie 1: Créer un système d'exploitation pour la raspberry avec buildroot
+
+## étape 1: installer docker
+voir le guide à l'adresse: https://docs.docker.com/install/linux/docker-ce/ubuntu/
+docker sert à compiler un OS pour la raspberry, on utilise une image précompilée car le temps de compilation est long
+
+## étape 2: préparer le conteneur docker
+récupération de l'image pré-compilée (évite de passer plusieurs heures a compiler tous l'OS)
+````
 $ docker pull pblottiere/embsys-rpi3-buildroot-video
+````
 
 Lancer le conteneur docker:
 $ docker run -it pblottiere/embsys-rpi3-buildroot /bin/bash
@@ -16,18 +21,23 @@ $ ls
 buildroot-precompiled-2017.08.tar.gz
 
 décompresser la tarball:
-''''
+````
 # tar zxvf buildroot-precompiled-2017.08.tar.gz
 # cd buildroot-precompiled-2017.08
-''''
+````
+créer le fichier de configuration:
+````
 # make embsys_defconfig
+````
 
 ouvrir le menu de configuration:
+````
 # make menuconfig
+````
 
 Pour pouvoir utiliser la caméra depuis la raspberry, il faut 2 packages:
-vérifier que l'option BR2_PACKAGE_RPI_FIRMWARE_X est activée, la rechercher avec la commande '/' dans buildroot, on doit avoir:
-│ Symbol: BR2_PACKAGE_RPI_FIRMWARE_X [=y]   
+vérifier que l'option BR2_PACKAGE_RPI_FIRMWARE_X est activée, la rechercher avec la commande '/' dans buildroot. On doit avoir:
+  │ Symbol: BR2_PACKAGE_RPI_FIRMWARE_X [=y]   
   │ Type  : boolean   
   │ Prompt: extended ('x', more codecs)    
   │   Location:                     
@@ -38,11 +48,11 @@ vérifier que l'option BR2_PACKAGE_RPI_FIRMWARE_X est activée, la rechercher av
   │ (1)         -> Firmware to boot (<choice> [=y])    
   │   Defined at package/rpi-firmware/Config.in:28 
   │   Depends on: <choice> 
-Idem pour l'option BR2_PACKAGE_LIBV4L
+l'option BR2_PACKAGE_LIBV4L doit également être activée
   
   
   
-Maintenant il faut flasher la carte SD
+## étape 3: flasher la carte SD
 
 1-trouver le container id du docker dans lequel se trouve l'image a flasher
 ouvrir un terminal et taper $ sudo docker ps
