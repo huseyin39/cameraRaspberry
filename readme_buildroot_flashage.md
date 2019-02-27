@@ -16,9 +16,10 @@ $ ls
 buildroot-precompiled-2017.08.tar.gz
 
 décompresser la tarball:
+''''
 # tar zxvf buildroot-precompiled-2017.08.tar.gz
 # cd buildroot-precompiled-2017.08
-
+''''
 # make embsys_defconfig
 
 ouvrir le menu de configuration:
