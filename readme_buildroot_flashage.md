@@ -25,7 +25,7 @@ décompresser la tarball:
 # tar zxvf buildroot-precompiled-2017.08.tar.gz
 # cd buildroot-precompiled-2017.08
 ````
-créer le fichier de configuration:
+définir les options de compilation:
 ````
 # make embsys_defconfig
 ````
@@ -59,103 +59,45 @@ ouvrir un terminal et taper $ sudo docker ps
 lire le champ CONTAINER ID, par exemple 7a7b1409293b
 
 2-copier l'image du conteneur docker sur le PC (car l'image est dans le conteneur qui n'a pas accès a la carte sd montée sur le pc)
+````
 $ docker cp <container_id>:/root/buildroot-precompiled-2017.08/output/images/sdcard.img .
+````
 
 3-trouver le path de la carte sd dans /dev avec la commande dmesg
 
 4-flasher cette image sur la carte
+````
 $ sudo dd if=sdcard.img of=/dev/sdX
+````
 
-5- copier startup_x.elf et fixup_x.dat sur la 1ère partition de la carte SD avec la commande cp
+5-copier startup_x.elf et fixup_x.dat sur la 1ère partition de la carte SD avec la commande cp
 
-il faut finalement modifier le fichier config.txt de la 1ère partition de la carte SD pour ajouter:
+6-modifier le fichier config.txt de la 1ère partition de la carte SD pour ajouter:
 start_x=1
 gpu_mem=128
 
 
+## étape 4: cross-compilation
+Il faut cross-compiler car le code doit tourner sur le processeur et la version de l'os installé sur la raspberry. La cross compilation se fait depuis le conteneur docker que l'on a créé.
 
-###############################################################################################################
-Pour avoir le support de la caméra sur la RPI3, un firmware spécifique doit être compilé avec Buildroot. Pour cela, il faut activer l'option BR2_PACKAGE_RPI_FIRMWARE_X dans le fichier de configuration de Buildroot.
+1-Il faut d'abord copier le code a cross-compiler depuis la machine hote vers le conteneur docker avec la commande cp
+````
+$ sudo docker cp code.c 7a7b1409293b:/code.c
+````
 
-De plus, afin d'intéragir avec la caméra, l'API de V4L est conseillée. Il est donc nécessaire d'activer l'option BR2_PACKAGE_LIBV4L dans le fichier de configuration Buildroot.
+2-cross compiler en utilisant le programme gcc correspond à l'architecture de la raspberry:
+````
+# ./output/host/usr/bin/arm-linux-gcc code.c -o executable
 
-Votre système d'exploitation précompilé grâce à Buildroot est disponible via une image Docker (comme lors des TPs):
+````
 
-$ docker pull pblottiere/embsys-rpi3-buildroot-video
+3-copier le code compilé sur le pc hote
+````
+$ sudo docker cp 7a7b1409293b:/executable .
+````
 
-Pour créer un conteneur:
+4-puis le copier dans le répertoire /home/usr de la 2ième partition de la carte SD
 
-$ docker run -it pblottiere/embsys-rpi3-buildroot-video /bin/bash
-docker# cd /root
-docker# ls
-buildroot-precompiled-2017.08.tar.gz
-docker# tar zxvf buildroot-precompiled-2017.08.tar.gz
-
-Le nécessaire pour flasher la carte RPI3 avec le support de la caméra est alors disponible:
-
-    sdcard.img à flasher sur la carte SD avec la commande dd
-    start_x.elf et fixup_x.dat à copier avec la commande cp sur la 1ère partition de la carte SD
-
-Il faut finalement modifier le fichier config.txt de la 1ère partition de la carte SD pour ajouter:
-
-start_x=1
-gpu_mem=128
-###############################################################################################################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Cross compilation du code pour la raspberry
-  (il faut cross compiler car le code doit tourner sur le processeur et la version de l'os installé sur la raspberry)
-  
-  https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/Hosts-and-Cross_002dCompilation.html
-  + tp
-  
-  copier ce code compiler sur le pc hote, puis le copier dans le répertoire /home/usr de la 2ième partition de la carte SD
-  
-  
-  
-  
-  
-  
-  
-
-    
 
 Au démarrage de la raspberry, il faut lancer bcm2835-v4l2 grâce à la commande modprobe (on se connecte à la raspberry avec gtkterm en USB pour ouvrir une console a distance permettant de lancer cette commande)
 cela devrait permettre de voir video0 dans /dev (faire: $ rpi3# ls /dev/video0)
