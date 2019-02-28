@@ -20,3 +20,5 @@ Le client et le serveur choisissent le port (20000 pour le servo moteur) pour sa
 Après la complitation du client en utilisant le gcc(ex: gcc -o nomDuFichier -Ficher.c), on utilise la commande ./nomDuFichier pour lancer le client. Pour le serveur de la camera on utilise la cross compilation et puis sur la raspberry on lance le serveur.
 
 Le serveur fonctionne via TCP/IP également, on  va créer un socket (le port est spécifié au lancement du .exe) afin que le client et le serveur caméra puissent se connecter. Le serveur reste en statut bloquant jusqu’à ce qu'un client se connecte. Après s'être connecté, le client envoie le nom de l’image qui va être prise par la caméra, puis le serveur éxecute le code pour prendre la photo.
+
+Le code exécuté est le code cross-compilé [v4l2grab.c](https://github.com/twam/v4l2grab/blob/master/v4l2grab.c).
