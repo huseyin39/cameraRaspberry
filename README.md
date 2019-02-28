@@ -19,4 +19,4 @@ Le serveur de la caméra utilise le TCP/IP pour se connecter avec le client. Le 
 
 Après la complitation du client en utilisant le gcc(ex: gcc -o nomDuFichier -Ficher.c), on utilise la commande ./nomDuFichier pour lancer le client. Pour le serveur de la camera on utilise la cross compilation et puis sur la raspberry on lance le serveur.
 
-Le serveur fonctionne avec le TCP,alors on  va créer un socket afin que le client et le serveur caméra puissent se connecter. Le serveur reste en status bloquant jusqu’un client se connecte. Après avoir connecté, le client envoie le nom d’image qui va être prise par la caméra et puis le serveur compile le code di caméra.
+Le serveur fonctionne via TCP, on  va créer un socket afin que le client et le serveur caméra puissent se connecter. Le serveur reste en status bloquant jusqu’à ce qu'un client se connecte. Après s'être connecté, le client envoie le nom de l’image qui va être prise par la caméra, puis le serveur éxecute le code pour prendre la photo.
