@@ -13,7 +13,7 @@ Enfin, la méthode setAngle(angle) permet d'actionner la caméra en fonction de 
 
 
 
-# Serveur caméra et client
+# Serveur caméra et client:
 
 Le serveur de la caméra utilise le TCP/IP pour se connecter avec le client. Le client et le serveur choisissent le port (20000 pour le servo moteur) pour savoir à quel serveur se connecter. De plus, on entre l'ip du serveur chez le client pour se connecter. Pour terminer la session il suffit que le client envoie "end" au serveur.
 
