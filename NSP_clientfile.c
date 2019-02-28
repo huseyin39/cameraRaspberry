@@ -85,7 +85,8 @@ int main()
  else {
 	do
 	{
-        printf("prendre une photo\n");
+
+      printf("nom de l'image avec .jpeg ou end pour terminer\n");
         scanf("%s",mes);
 // envoyer le message
           st = send(s,mes,strlen(mes),0);
