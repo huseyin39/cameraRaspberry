@@ -55,7 +55,7 @@ char mes[1024];
      return -1;
    }
    do {
-      printf("nom de l'image avec .jpeg\n");
+      printf("prendre une photo\n");
       st = recv(s,&mes,sizeof(mes),0);
 	if (strcmp(mes,"end")==0)
 		{
