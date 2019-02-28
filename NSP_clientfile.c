@@ -63,6 +63,7 @@ int main()
 
       printf("*****************System Embarque******************* \n");
       printf("\n \n \n");
+ if(portserver==20000){
      do
 	{
         printf("entree l'angle pour le moteur :\n");
@@ -80,4 +81,24 @@ int main()
               }
 }
     }while (strcmp(mes,"end")!=0);
+ }
+ else {
+	do
+	{
+        printf("prendre une photo\n");
+        scanf("%s",mes);
+// envoyer le message
+          st = send(s,mes,strlen(mes),0);
+		if(strcmp(mes,"end")!=0)
+          {
+          if (st!=strlen(mes)) 
+            printf("error occur when sending the message\n");
+          else {
+//recevoir le message du serveur 
+              st = recv(s,&mes,sizeof(mes),0);
+              printf("%s \n",mes);
+              }
+}
+    }while (strcmp(mes,"end")!=0); 
+ }
  }
